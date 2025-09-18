@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Think BoticS</title>
+  <link rel="icon" type="image/png" href="logo.png.jpg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Animated Math Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url(math_background.png) no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+      margin: 0;
+      color: #222;
+      user-select: none;
+    }
+
+    .wrapper {
+      max-width: 900px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 0.3em;
+    }
+
+    #status {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+
+    #question {
+      font-size: 1.5em;
+      margin-bottom: 12px;
+      min-height: 1.8em;
+    }
+
+    #scene {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      min-height: 250px;
+      background: #fefefe;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+      margin-bottom: 15px;
+      user-select: none;
+    }
+
+    .item {
+      font-size: 40px;
+      position: relative;
+      transition: transform 0.5s, opacity 0.5s;
+    }
+
+    .burst {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+
+    .arrow {
+      position: absolute;
+      font-size: 36px;
+      animation: fly 0.6s forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fly {
+      from {
+        transform: translateY(-50px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .groupA {
+      transform: translateX(-40px);
+    }
+
+    .groupB {
+      transform: translateX(40px);
+    }
+
+    .merge {
+      transform: translateX(0);
+    }
+
+    .rowHidden {
+      opacity: 0;
+    }
+
+    .snakeEat {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+
+    .controls {
+      margin-top: 10px;
+    }
+
+    input[type="number"] {
+      padding: 8px;
+      font-size: 16px;
+      width: 120px;
+      border: 2px solid #888;
+      border-radius: 6px;
+      outline-offset: 2px;
+      transition: border-color 0.3s;
+    }
+    input[type="number"]:focus {
+      border-color: #0a84ff;
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      margin-left: 6px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #0a84ff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #006ddb;
+    }
+
+    #feedback {
+      margin-top: 12px;
+      min-height: 1.4em;
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #d93025; /* red for wrong */
+    }
+    #feedback.correct {
+      color: #188038; /* green for correct */
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Animated Math Game</h1>
+    <h2>Math isn’t hard—it’s an adventure</h2>
+    <div id="status">Press Start to play</div>
+    <div id="question"></div>
+    <div id="scene"></div>
+    <div class="controls">
+      <button id="startBtn">Start</button>
+      <input id="answer" type="number" placeholder="Answer" style="display:none;" autocomplete="off" />
+      <button id="submitBtn" style="display:none;">Submit</button>
+    </div>
+    <div id="feedback"></div>
+
+    <!-- Back to class page button -->
+    <div style="margin-top: 20px;">
+      <button id="backBtn">Back to Class Page</button>
+    </div>
+  </div>
+
+  <script>
+    const scene = document.getElementById('scene');
+    const statusEl = document.getElementById('status');
+    const questionEl = document.getElementById('question');
+    const startBtn = document.getElementById('startBtn');
+    const answerBox = document.getElementById('answer');
+    const submitBtn = document.getElementById('submitBtn');
+    const feedback = document.getElementById('feedback');
+    const backBtn = document.getElementById('backBtn');
+
+    let level = 0, qnum = 0, correctAns = 0;
+    const QUESTIONS_PER_LEVEL = 5;
+
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function clearScene() {
+      scene.innerHTML = '';
+    }
+
+    // Animations
+    function animateAddition(a, b) {
+      return new Promise(res => {
+        clearScene();
+        const groupA = [], groupB = [];
+
+        for (let i = 0; i < a; i++) {
+          const d = document.createElement('div');
+          d.className = 'item groupA';
+          d.textContent = '🟦';
+          scene.appendChild(d);
+          groupA.push(d);
+        }
+
+        for (let i = 0; i < b; i++) {
+          const d = document.createElement('div');
+          d.className = 'item groupB';
+          d.textContent = '🍎';
+          scene.appendChild(d);
+          groupB.push(d);
+        }
+
+        setTimeout(() => {
+          groupA.forEach(x => x.classList.add('merge'));
+          groupB.forEach(x => x.classList.add('merge'));
+        }, 500);
+
+        setTimeout(res, 1200);
+      });
+    }
+
+    function animateSubtraction(a, b) {
+      return new Promise(res => {
+        clearScene();
+        const balloons = [];
+
+        for (let i = 0; i < a; i++) {
+          const d = document.createElement('div');
+          d.className = 'item';
+          d.textContent = '🎈';
+          scene.appendChild(d);
+          balloons.push(d);
+        }
+
+        let hit = 0;
+        const interval = setInterval(() => {
+          if (hit >= b || hit >= balloons.length) {
+            clearInterval(interval);
+            setTimeout(res, 700);
+            return;
+          }
+
+          const target = balloons[hit];
+          const arrow = document.createElement('div');
+          arrow.className = 'arrow';
+          arrow.textContent = '🏹';
+          arrow.style.left = target.offsetLeft + 'px';
+          arrow.style.top = target.offsetTop - 50 + 'px';
+          scene.appendChild(arrow);
+
+          setTimeout(() => {
+            target.classList.add('burst');
+            arrow.remove();
+          }, 300);
+
+          hit++;
+        }, 250);
+      });
+    }
+
+    function animateMultiplication(a, b) {
+      return new Promise(res => {
+        clearScene();
+        const total = a * b;
+        const animals = [];
+
+        for (let i = 0; i < total; i++) {
+          const d = document.createElement('div');
+          d.className = 'item rowHidden';
+          d.textContent = '🐶';
+          scene.appendChild(d);
+          animals.push(d);
+        }
+
+        let index = 0;
+        const interval = setInterval(() => {
+          if (index >= animals.length) {
+            clearInterval(interval);
+            setTimeout(res, 500);
+            return;
+          }
+          animals[index].classList.remove('rowHidden');
+          index++;
+        }, 80);
+      });
+    }
+
+    function animateDivision(total, divisor) {
+      return new Promise(res => {
+        clearScene();
+        const frogs = [], snakes = [];
+
+        for (let i = 0; i < divisor; i++) {
+          const s = document.createElement('div');
+          s.className = 'item';
+          s.textContent = '🐍';
+          scene.appendChild(s);
+          snakes.push(s);
+        }
+
+        for (let i = 0; i < total; i++) {
+          const f = document.createElement('div');
+          f.className = 'item';
+          f.textContent = '🐸';
+          scene.appendChild(f);
+          frogs.push(f);
+        }
+
+        let eaten = 0;
+        const interval = setInterval(() => {
+          if (eaten >= frogs.length) {
+            clearInterval(interval);
+            setTimeout(res, 500);
+            return;
+          }
+          frogs[eaten].classList.add('snakeEat');
+          eaten++;
+        }, 120);
+      });
+    }
+
+    // Fireworks animation on winning question
+    function fireWorkBlast() {
+      return new Promise(res => {
+        const colors = ['#FF3F8E', '#04C2C9', '#2E55C1', '#FFC700', '#FF6F61', '#00FFAB'];
+        const blasts = [];
+
+        for (let i = 0; i < 30; i++) {
+          const blast = document.createElement('div');
+          blast.style.position = 'absolute';
+          blast.style.borderRadius = '50%';
+          blast.style.background = colors[i % colors.length];
+          blast.style.width = blast.style.height = `${rand(10, 20)}px`;
+          blast.style.left = `${rand(40, scene.clientWidth - 40)}px`;
+          blast.style.top = `${rand(40, scene.clientHeight - 40)}px`;
+          blast.style.opacity = '1';
+          blast.style.pointerEvents = 'none';
+          blast.style.zIndex = '999';
+          blast.style.transition = 'transform 0.8s ease-out, opacity 0.8s ease-out';
+
+          scene.appendChild(blast);
+          blasts.push(blast);
+
+          // Animate outward
+          setTimeout(() => {
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = rand(50, 120);
+            const x = distance * Math.cos(angle);
+            const y = distance * Math.sin(angle);
+            blast.style.transform = `translate(${x}px, ${y}px) scale(0)`;
+            blast.style.opacity = '0';
+          }, 50);
+        }
+
+        setTimeout(() => {
+          blasts.forEach(b => b.remove());
+          res();
+        }, 900);
+      });
+    }
+
+    // Generate question per level
+    function genQuestion(level) {
+      if (level === 1) {
+        // Subtraction first
+        const a = rand(6, 15);
+        const b = rand(1, a - 1);
+        return { text: `${a} - ${b} = ?`, ans: a - b, anim: () => animateSubtraction(a, b) };
+      } else if (level === 2) {
+        const a = rand(1, 5), b = rand(1, 5);
+        return { text: `${a} + ${b} = ?`, ans: a + b, anim: () => animateAddition(a, b) };
+      } else if (level === 3) {
+        const a = rand(2, 5), b = rand(2, 5);
+        return { text: `${a} × ${b} = ?`, ans: a * b, anim: () => animateMultiplication(a, b) };
+      } else if (level === 4) {
+        const divisor = rand(2, 5), mul = rand(2, 5);
+        const total = divisor * mul;
+        return { text: `${total} ÷ ${divisor} = ?`, ans: mul, anim: () => animateDivision(total, divisor) };
+      } else {
+        const op = rand(1, 4);
+        if (op === 1) {
+          const a = rand(10, 30), b = rand(10, 30);
+          return { text: `${a} + ${b} = ?`, ans: a + b, anim: () => animateAddition(a, b) };
+        } else if (op === 2) {
+          const a = rand(20, 40), b = rand(5, 15);
+          return { text: `${a} - ${b} = ?`, ans: a - b, anim: () => animateSubtraction(a, b) };
+        } else if (op === 3) {
+          const a = rand(3, 8), b = rand(3, 8);
+          return { text: `${a} × ${b} = ?`, ans: a * b, anim: () => animateMultiplication(a, b) };
+        } else {
+          const d = rand(2, 6), m = rand(2, 6), total = d * m;
+          return { text: `${total} ÷ ${d} = ?`, ans: m, anim: () => animateDivision(total, d) };
+        }
+      }
+    }
+
+    // Game flow
+    async function nextQuestion() {
+      feedback.textContent = '';
+      feedback.classList.remove('correct');
+      if (qnum >= QUESTIONS_PER_LEVEL) {
+        if (level === 5) {
+          statusEl.textContent = 'You won!';
+          questionEl.textContent = '🏆 All levels complete!';
+          await fireWorkBlast();
+          return endGame(true);
+        }
+        level++;
+        qnum = 0;
+        statusEl.textContent = 'Level ' + level;
+      }
+
+      const q = genQuestion(level);
+      correctAns = q.ans;
+      questionEl.textContent = 'Q' + (qnum + 1) + ': ' + q.text;
+
+      answerBox.style.display = 'none';
+      submitBtn.style.display = 'none';
+
+      await q.anim();
+
+      answerBox.value = '';
+      answerBox.style.display = 'inline-block';
+      submitBtn.style.display = 'inline-block';
+      answerBox.focus();
+    }
+
+    function endGame(win) {
+      answerBox.style.display = 'none';
+      submitBtn.style.display = 'none';
+      startBtn.style.display = 'inline-block';
+      startBtn.textContent = 'Restart';
+      clearScene();
+    }
+
+    startBtn.addEventListener('click', () => {
+      level = 1;
+      qnum = 0;
+      startBtn.style.display = 'none';
+      statusEl.textContent = 'Level 1';
+      nextQuestion();
+    });
+
+    submitBtn.addEventListener('click', async () => {
+      const val = parseInt(answerBox.value);
+      if (isNaN(val)) {
+        feedback.textContent = 'Enter a number!';
+        feedback.classList.remove('correct');
+        return;
+      }
+
+      if (val === correctAns) {
+        feedback.textContent = '✅ Correct!';
+        feedback.classList.add('correct');
+        qnum++;
+        await fireWorkBlast();
+        nextQuestion();
+      } else {
+        feedback.textContent = `❌ Wrong. Correct answer was ${correctAns}. Game Over.`;
+        feedback.classList.remove('correct');
+        statusEl.textContent = 'Game Over - back to Level 1';
+        endGame(false);
+      }
+    });
+
+    // Handle Enter key as submit when answer box focused
+    answerBox.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && submitBtn.style.display !== 'none') {
+        submitBtn.click();
+      }
+    });
+
+    // Back button event
+    backBtn.addEventListener('click', () => {
+      window.location.href = 'Class-1.html'; // Change to your local class page file
+    });
+  </script>
+</body>
+</html>

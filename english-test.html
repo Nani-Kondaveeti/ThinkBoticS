@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Think BoticS</title>
+  <link rel="icon" type="image/png" href="logo.png.jpg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Word Scramble Game</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", cursive;
+      min-height: 100vh;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image: url('english_background.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding-top: 60px;
+    }
+    .title {
+      font-size: 2.1em;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 1.15em;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .level-box {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      padding: 38px 32px 32px 32px;
+      min-width: 340px;
+      max-width: 380px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .scrambled-word {
+      font-size: 2.2em;
+      color: #ff5722;
+      font-weight: bold;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+    }
+    .image-placeholder {
+      width: 100px;
+      height: 100px;
+      margin: 12px auto;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9f9f9;
+      border: 2px dashed #bbb;
+      color: #aaa;
+      font-size: 60px;
+    }
+    input {
+      padding: 9px 12px;
+      font-size: 18px;
+      border: 2px solid #ff9800;
+      border-radius: 9px;
+      outline: none;
+      margin-right: 7px;
+      margin-bottom: 12px;
+      width: 160px;
+    }
+    button {
+      padding: 9px 18px;
+      font-size: 17px;
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin: 5px;
+    }
+    button:hover {
+      background: #388e3c;
+      transform: scale(1.04);
+    }
+    .result {
+      font-size: 19px;
+      font-weight: bold;
+      min-height: 25px;
+      margin-top: 10px;
+    }
+    .back-button {
+      background-color: #2196f3;
+    }
+    .back-button:hover {
+      background-color: #1976d2;
+    }
+    .level-label {
+      font-size: 1em;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="title">Word Scramble Game</div>
+    <div class="subtitle">English vocabulary fun!</div>
+    
+    <div class="level-box">
+      <div class="level-label" id="levelLabel">Level 1 of 10</div>
+      <div class="scrambled-word" id="scrambledWord">APPLE</div>
+      <div class="image-placeholder" id="imageBox">🍎</div>
+      
+      <input type="text" id="userInput" placeholder="Type your answer" />
+      <button onclick="checkAnswer()">Submit</button>
+      <div class="result" id="result"></div>
+      <br />
+      <button class="back-button" onclick="goBack()">⬅ Back to Class Page</button>
+    </div>
+  </div>
+
+  <script>
+    const levels = {
+      1: [ { word: "CAT", img: "🐱" }, { word: "DOG", img: "🐶" }, { word: "SUN", img: "☀️" } ],
+      2: [ { word: "BALL", img: "⚽" }, { word: "FAN", img: "🌀" }, { word: "CAR", img: "🚗" } ],
+      3: [ { word: "TREE", img: "🌳" }, { word: "FISH", img: "🐟" }, { word: "BOOK", img: "📖" } ],
+      4: [ { word: "CHAIR", img: "🪑" }, { word: "GRAPE", img: "🍇" }, { word: "HOUSE", img: "🏠" } ],
+      5: [ { word: "PLANE", img: "✈️" }, { word: "CLOUD", img: "☁️" }, { word: "TRAIN", img: "🚆" } ],
+      6: [ { word: "MONKEY", img: "🐒" }, { word: "BANANA", img: "🍌" }, { word: "MARKET", img: "🏪" } ],
+      7: [ { word: "LADDER", img: "🪜" }, { word: "CANDLE", img: "🕯️" }, { word: "BUTTON", img: "🔘" } ],
+      8: [ { word: "ELEPHANT", img: "🐘" }, { word: "NOTEBOOK", img: "📓" }, { word: "BACKPACK", img: "🎒" } ],
+      9: [ { word: "TELEPHONE", img: "📞" }, { word: "TELEVISION", img: "📺" }, { word: "MICROSCOPE", img: "🔬" } ],
+      10:[ { word: "ASTRONAUT", img: "👨‍🚀" }, { word: "DINOSAUR", img: "🦖" }, { word: "COMPUTER", img: "💻" } ]
+    };
+
+    let currentLevel = 1;
+    let currentWord = "";
+    let scrambled = "";
+
+    function shuffleWord(word) {
+      let shuffled = word;
+      while (shuffled === word) {
+        shuffled = word.split("").sort(() => Math.random() - 0.5).join("");
+      }
+      return shuffled;
+    }
+
+    function loadLevel(level) {
+      const words = levels[level];
+      const randomItem = words[Math.floor(Math.random() * words.length)];
+      currentWord = randomItem.word.toUpperCase();
+      scrambled = shuffleWord(currentWord);
+
+      document.getElementById("scrambledWord").textContent = scrambled;
+      document.getElementById("imageBox").textContent = randomItem.img;
+      document.getElementById("userInput").value = "";
+      document.getElementById("result").textContent = "";
+      document.getElementById("levelLabel").textContent = `Level ${level} of 10`;
+      document.getElementById("userInput").style.display = "inline-block";
+      document.getElementById("userInput").focus();
+    }
+
+    function checkAnswer() {
+      const answer = document.getElementById("userInput").value.trim().toUpperCase();
+      const result = document.getElementById("result");
+
+      if (answer === currentWord) {
+        result.textContent = "✅ Correct!";
+        result.style.color = "green";
+
+        if (currentLevel < 10) {
+          setTimeout(() => {
+            currentLevel++;
+            loadLevel(currentLevel);
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            result.textContent = "🎉 You've completed all levels!";
+            document.getElementById("scrambledWord").textContent = "";
+            document.getElementById("imageBox").textContent = "🏆";
+            document.getElementById("userInput").style.display = "none";
+          }, 1000);
+        }
+      } else {
+        result.textContent = "❌ Wrong! Back to Level 1.";
+        result.style.color = "red";
+        setTimeout(() => {
+          currentLevel = 1;
+          loadLevel(currentLevel);
+        }, 1000);
+      }
+    }
+
+    function goBack() {
+      window.location.href = "Class-1.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("userInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") checkAnswer();
+      });
+      loadLevel(currentLevel);
+    });
+  </script>
+</body>
+</html>

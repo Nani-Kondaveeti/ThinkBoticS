@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Think BoticS</title>
+  <link rel="icon" type="image/png" href="logo.png.jpg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Think Botics - Subjects</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive;
+      background: #fff8e1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background: #4acadd;
+      padding: 12px 20px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-btn {
+      background: white;
+      color: #ff9800;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 50px);
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #ffe6cc;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .profile {
+      background: #fff3e0;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .profile-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      background-color: #ffe0b2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .profile-img img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .profile h3 {
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .profile p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .subject-btn {
+      padding: 12px;
+      border-radius: 8px;
+      text-align: left;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      background: rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .subject-btn:hover {
+      transform: scale(1.03);
+    }
+
+    .maths { background-color: rgba(77, 166, 255, 0.5); }
+    .science { background-color: rgba(102, 204, 102, 0.5); }
+    .telugu { background-color: rgba(255, 102, 102, 0.5); }
+    .english { background-color: rgba(0, 204, 153, 0.5); }
+
+    .level-bar {
+      margin-top: 8px;
+      height: 6px;
+      background: #ccc;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .level-fill {
+      height: 100%;
+      background-color: #ff9800;
+      width: 40%;
+    }
+
+    .settings {
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .settings img {
+      width: 28px;
+      height: 28px;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .settings img:hover {
+      opacity: 1;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      background: #ffffff;
+      border-left: 2px solid #ddd;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .content h2 {
+      color: #fa49ce;
+      margin-top: 0;
+    }
+
+    .unit {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 2px solid black;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .unit:hover {
+      transform: scale(1.05);
+      background: #f2f2f2;
+    }
+
+    .unit-details {
+      margin-top: 20px;
+      padding: 15px;
+      background: #ffe6b3;
+      border-radius: 8px;
+    }
+
+    .video-container {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .video-container iframe {
+      flex: 1 1 45%;
+      height: 200px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    .start-test {
+      margin-top: 30px;
+      margin-right: 40px;
+      float: right;
+      background: #ff9800;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+
+    .start-test:hover {
+      transform: scale(1.05);
+    }
+
+    .start-test img {
+      width: 20px;
+      height: 20px;
+      animation: shake 1s infinite ease-in-out;
+    }
+
+    @keyframes shake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div id="classTitle">Class 1</div>
+    <button class="back-btn" onclick="goBack()">⬅ Back</button>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-top">
+        <!-- Profile -->
+        <div class="profile">
+          <div class="profile-img">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Icon" />
+          </div>
+          <p>ID: STU12345</p>
+        </div>
+
+        <!-- Subjects -->
+        <div id="subjectList"></div>
+      </div>
+
+      <!-- Settings -->
+      <div class="settings" onclick="logout()">
+      <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png" alt="Settings" />
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content" id="subjectContent">
+      <h2>Click on a subject to see details 📘</h2>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const subjects = {
+      Maths: {
+        progress: 60,
+        videos: [
+          "https://www.youtube.com/embed/mjlsSYLLOSE",
+          "https://www.youtube.com/embed/7J1OkxuyLD0"
+        ],
+        units: [
+          "Unit 1: Numbers", "Unit 2: Algebra", "Unit 3: Geometry",
+          "Unit 4: Data Handling", "Unit 5: Measurements", "Unit 6: Patterns"
+        ],
+        details: {
+          "Unit 1: Numbers": "Numbers are everywhere in our lives. They are the first thing we learn in math because they help us count and understand the world. If you look around, you’ll see numbers on clocks 🕒, calendars 📅, money 💰, and even on your favorite video game scores 🎮. Numbers tell us how many things we have, how much something costs, or how old we are.They can be tiny like 1 or 2, or giant like 1,000,000. We use numbers to add things together (like adding up how many candies we collected 🍬), subtract (like sharing and taking away), multiply (like making groups of toys), or divide (like sharing chocolates equally with friends). Numbers are the foundation of math—they are the ABC of counting. Without them, we wouldn’t know how to measure distance, count money, or even play board games where you roll dice 🎲. Numbers = the key to understanding everything that can be counted.",
+          "Unit 2: Algebra": "Algebra is like solving mysteries using math. Instead of just using numbers we already know, we use letters like x, y, or z to stand for numbers we don’t know yet. It’s like a secret code or a treasure hunt 🗝.For example, if I say, “I have a number. If I add 5 to it, I get 10,” you don’t know the number yet. But in algebra, you can write it like this: x + 5 = 10. Then you figure it out step by step, like a detective 🕵. The answer is x = 5.Algebra teaches us how to solve puzzles and find missing pieces. It’s not just about schoolwork—it’s how computers think, how scientists calculate rockets 🚀, and how we can solve everyday problems like dividing pizza 🍕 equally or planning time ⏰. Algebra = the art of finding the unknown.",
+          "Unit 3: Geometry": "Geometry is math with shapes and spaces. Everything we see around us has a shape: the sun ☀ is a circle, a slice of bread 🍞 is a rectangle, and a traffic sign ⚠ can be a triangle. Geometry helps us study these shapes—their sides, corners, and sizes.It’s also about space—how far things are, how tall they are, and how they fit together. Builders use geometry to design bridges 🌉, architects use it for houses 🏠, and artists use it to make patterns 🎨. Even in nature, flowers 🌸 and honeycombs 🍯 are made of geometric shapes.With geometry, we measure lines, angles, and surfaces. We can figure out the area (like how much paint you need for a wall 🎨) or the perimeter (like how much ribbon to go around a gift 🎁). Geometry = understanding the shapes and spaces that make our world.",
+          "Unit 4: Data Handling": "Data means “information.” When we collect facts and numbers, we call it data. But just having the data is not enough—we need to organize it so it makes sense. That’s where data handling comes in.Imagine you ask your classmates what their favorite color is: 10 say Red ❤ 5 say Blue 💙 8 say Green 💚 That’s your data! But if you put it in a bar graph 📊 or pie chart 🥧, it’s much easier to see which color is most popular. Data handling is used in so many real things: teachers use it to track exam scores, shops use it to see what people buy the most, and weather reports use it to show temperatures 🌡. Even YouTube or games track how many people watched or played—that’s data! So, data handling = collecting, organizing, and showing information in a clear way.",
+          "Unit 5: Measurements": "Length, weight, time.Measurement is how we figure out the size of the world around us. We measure length (how long or tall something is), weight (how heavy it is), and capacity (how much it can hold).For example:A pencil ✏ might be 15 cm long.A watermelon 🍉 might weigh 2 kg.A bottle 🥤 might hold 1 liter of water.We also measure time ⏰ (seconds, minutes, hours) and temperature 🌡 (hot or cold). Without measurement, we wouldn’t know how to cook properly (imagine too much salt 🧂 in food!), how to build safely (like how tall a bridge should be), or even how far we’ve traveled 🚗.Measurement is everywhere—when a doctor checks your height, when you measure flour to bake a cake 🎂, or when athletes run races 🏃. Measurement = understanding size, weight, and time so we can use things the right way.",
+          "Unit 6: Patterns": "Identifying and completing patterns.Patterns are the repeating arrangements we see all around us. They can be numbers, shapes, colors, or even sounds.For example:Shapes: 🔺⚪🔺⚪ (triangle, circle, triangle, circle)Numbers: 2, 4, 6, 8, 10 (keep adding 2 each time)Nature: The stripes on a zebra 🦓 or the petals of a flower 🌸Patterns make life predictable. If you know the pattern, you can guess what comes next! Musicians use patterns in songs 🎶, fashion designers use them in clothes 👗, and mathematicians use them in numbers.Patterns are also the beginning of problem-solving. They help us find shortcuts, like knowing the times tables, or seeing how things grow. Patterns = the beauty of repetition and the clue to what comes next.",
+        }
+      },
+      Science: {
+        progress: 40,
+        videos: [
+          "https://www.youtube.com/embed/cY7JggN5M-U",
+          "https://www.youtube.com/embed/qMkXnwRlpRo"
+        ],
+        units: [
+          "Unit 1: Living Things", "Unit 2: Matter", "Unit 3: Energy",
+          "Unit 4: Water", "Unit 5: Plants", "Unit 6: Environment"
+        ],
+        details: {
+           "Unit 1: Living Things": "Step into the lively world of Living Things! 🐦🌳🐠 Living things are everything that grows, breathes, and changes. You, me, plants, animals, and even the tiniest insects 🐜 are all living things. They eat food, drink water, move, and grow. Unlike toys or rocks, living things can feel and respond to the world around them. From the buzzing bees 🐝 making honey to a tall tree 🌳 giving shade, every living thing has a special role in nature. In this level, you’ll learn to tell the difference between living and non-living things—and discover the secret that makes life magical.",
+          "Unit 2: Matter": "Now you enter the land of Matter—the stuff everything is made of. 🧊💧 Matter is everywhere. It’s in the air you breathe, the water you drink, and the chair you sit on. Matter can be solid (like rocks 🪨), liquid (like juice 🧃), or gas (like the air around us 🌬). It can change from one form to another—ice 🧊 melts into water 💧, and water turns into steam ☁. Matter is like the building blocks of the universe. Without it, nothing would exist. In this level, you’ll become a scientist who explores how matter behaves, transforms, and creates the world around us.",
+          "Unit 3: Energy": "Feel the spark as you unlock the power of Energy ⚡🔥🌞.Energy is what makes everything move, grow, and work. The sun ☀ gives light and heat, food 🍎 gives us energy to play, and electricity ⚡ powers our homes and gadgets. Energy comes in many forms—light, sound, heat, wind, and more.Without energy, cars wouldn’t run 🚗, fans wouldn’t spin 🌀, and plants wouldn’t grow 🌿. In this level, you’ll explore where energy comes from and how it flows everywhere, powering life itself.",
+          "Unit 4: Water": "Dive into the shimmering world of Water 💦🌊. Water is life. Every plant 🌱, animal 🐘, and human needs water to survive. You drink it, cook with it, and even play in it at the beach 🏖. Water is found in rivers, lakes, oceans, clouds, and even inside you! It changes shape—liquid (water 💧), solid (ice 🧊), and gas (steam ☁). The water cycle keeps it moving: from rain 🌧 to rivers to oceans, then back up to the clouds again. In this level, you’ll discover why water is precious and why we must save it.",
+          "Unit 5: Plants": "Walk into the green kingdom of Plants 🌳🌸🌾.Plants are nature’s givers. They make food using sunlight 🌞 through photosynthesis, give us oxygen to breathe 🌬, and provide shade, shelter, medicine, and beauty. From tiny grass 🌱 to giant trees 🌲, plants are everywhere. Without plants, there would be no fruits, no wood, no air to breathe, and no life at all. In this level, you’ll explore how plants grow, their parts (roots, stems, leaves, flowers 🌼), and why they are our greatest friends.",
+          "Unit 6: Environment": "Finally, enter the great circle of life—Environment 🌏The environment is everything around us: air, water, land, plants, animals, and humans. It’s the home we all share. A clean, healthy environment gives us food, water, air, and safety. But if we pollute it with smoke 🚬, plastic 🚮, or waste, we harm ourselves too. Taking care of the environment means planting trees 🌳, saving water 💧, reducing waste, and protecting animals 🐼. In this level, you’ll learn to be a guardian of Earth, keeping balance between humans and nature."
+        }
+      },
+      English: {
+        progress: 30,
+        videos: [
+          "https://www.youtube.com/embed/hq3yfQnllfQ",
+          "https://www.youtube.com/embed/QahSR-a6raQ"
+        ],
+        units: [
+          "Unit 1: Grammar", "Unit 2: Stories", "Unit 3: Poems",
+          "Unit 4: Essay Writing", "Unit 5: Vocabulary"
+        ],
+        details: {
+         "Unit 1: Grammar": "Grammar is the heartbeat of language. Imagine a land where words are tiny characters running around — some are nouns, strong and steady, others are verbs, always jumping and moving, while adjectives sprinkle color and sparkle. Without grammar, these characters would bump into each other in confusion. But grammar gives them rules, like traffic lights and bridges, helping them build strong and clear roads of communication. When you learn grammar, you become the guide of this world, arranging words into sentences that can tell jokes, share secrets, or create whole adventures. It’s not just rules — it’s the magic glue that holds the entire kingdom of language together.",
+          "Unit 2: Stories": "Stories are magical time machines and flying carpets. They let you step into someone else’s shoes, travel across deserts, swim through oceans, and soar across galaxies — all without leaving your chair. A story can make you laugh until your stomach hurts, or cry until your heart feels lighter. It can teach you bravery, kindness, and cleverness without even realizing it. Every story whispers a lesson: that even the smallest hero can make a big difference. Reading stories is like unlocking treasure chests filled with emotions, lessons, and dreams. And the best part? You get to keep the treasure forever.",
+          "Unit 3: Poems": "Poems are tiny worlds wrapped in rhythm and rhyme. They can be short like a fluttering butterfly, or long like a flowing river, but every poem has magic hidden inside. Poems turn simple words into fireworks — making raindrops sparkle, winds whisper, and stars sing. They don’t always follow rules; instead, they let your imagination dance freely. Reading a poem feels like listening to music written by the heart, while writing one is like painting with feelings instead of colors. Poems remind us that beauty can be found in the smallest things — a smile, a flower, or even a single word.",
+          "Unit 4: Essay Writing": "Essay writing is your superpower to shape the world with thoughts. Imagine building a castle — each sentence is a brick, each paragraph a tower, and by the end, you have created something strong and unique. An essay is where your ideas march in line, telling others what you believe, what you dream, and what you’ve seen. Whether it’s describing your best day ever, explaining why the stars shine, or sharing your dreams of the future, essay writing gives structure to imagination. It is your voice made visible — a chance to let the world hear you.",
+          "Unit 5: Vocabulary": "Vocabulary is your treasure chest of words, and each word is a jewel with its own shine. Some words sparkle like diamonds — strong, clear, and bright. Others are like soft pearls — gentle, quiet, but full of depth. When you learn new words, it’s like collecting powerful tools. They help you paint clearer pictures, express your feelings, and sound confident. A rich vocabulary lets you unlock doors to new stories, poems, and even conversations with people from faraway lands. Words are not just sounds; they are keys to imagination, knowledge, and connection. The more words you know, the bigger your world becomes."
+        }
+      },
+      Telugu: {
+        progress: 50,
+        videos: [
+          "https://www.youtube.com/embed/xPWitrmnyPI",
+          "https://www.youtube.com/embed/iXYleETEiYo"
+        ],
+        units: [
+          "Unit 1: పద్యాలు", "Unit 2: కథలు", "Unit 3: వ్యాసాలు",
+          "Unit 4: నిబంధనలు", "Unit 5: వ్యాకరణం"
+        ],
+        details: {
+           "Unit 1: పద్యాలు": "పద్యాలు అనేవి చిన్న మాటలతో రాసిన అద్భుత విశ్వం. అవి చిన్నవిగా కనిపించవచ్చు కానీ లోపల ఒక పెద్ద ప్రపంచం దాగి ఉంటుంది. ఒక పద్యం చదివినప్పుడు, అది మనకు ఒక మధురమైన పాటలా వినిపిస్తుంది. పక్షుల కిలకిలలు, గాలి వీచే శబ్దం, వర్షపు చినుకులు — ఇవన్నీ పద్యాల లోకంలో మాయగా మారుతాయి. పద్యాలు మన హృదయాన్ని తాకే మధురమైన స్వరాలు. అవి మనసులోని దుఃఖాన్ని తొలగించి ఆనందం నింపుతాయి. ఒక చిన్న పద్యం కూడా మనకు జీవితం గురించి గొప్ప పాఠాన్ని నేర్పుతుంది. పద్యాలు మాటలతో వేసిన చిత్రాలు, భావాలతో పాడిన గీతాలు. అవి మన ఊహాశక్తిని రెక్కలతో ఎగరేస్తాయి, మనసుకు వెలుగులు నింపుతాయి.",
+          "Unit 2: కథలు": "కథలు అనేవి సమయం, స్థలం అనే గోడలను చెరిపేసే తలుపులు. ఒక కథ మొదలవగానే మనం వేరే ప్రపంచంలోకి అడుగుపెడతాం. ఒకసారి మనం ధైర్యవంతుడైన రాజకుమారులం, మరొకసారి ఒక సాధారణ రైతు కష్టాలను చూసే వారమవుతాం. కథలు మనల్ని ఎన్నో రూపాల్లో మలుస్తాయి — ధైర్యం నేర్పుతాయి, దయను పెంపొందిస్తాయి, స్నేహం విలువను తెలియజేస్తాయి. ఒక చిన్న కథ కూడా మన మనసును శాశ్వతంగా మార్చే శక్తి కలిగి ఉంటుంది. కొన్ని కథలు మనకు నవ్వులు పంచుతాయి, కొన్ని కన్నీళ్లు తెప్పిస్తాయి, మరికొన్ని మనలోని హీరోని మేల్కొలుపుతాయి. కథలు అనేవి మన ఊహాశక్తి వంతెనలు, అవి మనల్ని జీవిత పాఠాలు దాచిన ప్రపంచానికి తీసుకెళ్తాయి.",
+          "Unit 3: వ్యాసాలు": "వ్యాసాలు అనేవి మన ఆలోచనలకు, మన కలలకు, మన భావాలకు అందమైన వేదికలు. మనం చూసిన ప్రతి దృశ్యం, మనసులో పుట్టిన ప్రతి ఆలోచన, మన కలగన్న ప్రతి కల వ్యాసరూపంలో వెలుగులోకి వస్తాయి. ఒక వ్యాసం అనేది మన మనసులోని చిత్రాన్ని మాటలతో వేసిన అద్భుత చిత్రంలాంటిది. అది మన ఊహలను గోడలపై రంగులు పూయినట్టుగా చూపిస్తుంది. వ్యాసరచన మనకు క్రమం నేర్పుతుంది — ఒక్కో వాక్యం ఒక ఇటుక, ఒక్కో పేరాగ్రాఫ్ ఒక గోపురం, మొత్తం వ్యాసం ఒక కోట. ఆ కోటలో మన ఆలోచనల రాజ్యం ఉంటుంది. వ్యాసాలు మన ఆత్మవిశ్వాసాన్ని పెంచుతాయి, మన మనసును విశాలం చేస్తాయి. అవి మన స్వరాన్ని వినిపించే మాధ్యమం, మనలోని సృజనాత్మకతను ప్రపంచానికి పరిచయం చేసే మార్గం.",
+          "Unit 4: నిబంధనలు": "నిబంధనలు అనేవి భాష అనే సముద్రంలో దారి చూపే దీపస్తంభాలు. మాటలు సముద్రపు అలల్లా ఎగురుతుంటే, నిబంధనలు వాటిని ఒక దిశలో నడిపిస్తాయి. అవి లేకుంటే వాక్యాలు గజిబిజిగా అయిపోతాయి. కానీ నిబంధనలతో వాక్యాలు అందమైన వరుసలో నిలుస్తాయి. ఒక నిబంధన నేర్చుకోవడం అంటే ఒక రహస్యాన్ని కనుగొనడం లాంటిది. ఒక్కసారిగా భాషలో ఒక కొత్త వెలుగు మనకు కనిపిస్తుంది. నిబంధనలు మన రాతకు శిల్పం చెక్కినట్టుగా ఆకారం ఇస్తాయి. అవి మన ఆలోచనలను గజిబిజి నుండి వెలికి తీసి, అందమైన మాలలాగా అల్లుతాయి. నిబంధనలు అనేవి మన మాటలకి బలం, మన భావాలకి అందం, మన రాతకి స్పష్టత ఇస్తాయి.",
+                }
+      }
+    };
+
+    const subjectList = document.getElementById("subjectList");
+    const subjectContent = document.getElementById("subjectContent");
+
+    Object.keys(subjects).forEach(sub => {
+      const btn = document.createElement("div");
+      btn.className = "subject-btn " + sub.toLowerCase();
+      btn.innerHTML = `
+        ${sub}
+        <div class="level-bar">
+          <div class="level-fill" style="width: ${subjects[sub].progress}%;"></div>
+        </div>
+      `;
+      btn.onclick = () => showSubject(sub);
+      subjectList.appendChild(btn);
+    }); 
+
+    function showSubject(sub) {
+      subjectContent.innerHTML = `
+        <h2>
+          ${sub}
+          <button style="float:right; padding:4px 10px; font-size:14px; background:#fa49ce; color:white; border:none; border-radius:6px; cursor:pointer;" onclick="goToSubjects()">← Back</button>
+        </h2>
+      `;
+
+      subjects[sub].units.forEach(unit => {
+        const div = document.createElement("div");
+        div.className = "unit";
+        div.textContent = unit;
+        div.onclick = () => showUnit(sub, unit);
+        subjectContent.appendChild(div);
+      });
+
+      const videoWrap = document.createElement("div");
+      videoWrap.className = "video-container";
+      subjects[sub].videos.forEach(url => {
+        const iframe = document.createElement("iframe");
+        iframe.src = url;
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.allowFullscreen = true;
+        videoWrap.appendChild(iframe);
+      });
+      subjectContent.appendChild(videoWrap);
+
+      const testBtn = document.createElement("div");
+      testBtn.className = "start-test";
+      testBtn.innerHTML = `Start Test <img src="https://cdn-icons-png.flaticon.com/512/743/743007.png" alt="joystick">`;
+      testBtn.onclick = () => startTest(sub);
+      subjectContent.appendChild(testBtn);
+    }
+
+    function showUnit(subject, unit) {
+      subjectContent.innerHTML = `<h2>${subject} - ${unit}</h2>`;
+      const detail = subjects[subject].details[unit];
+      const d = document.createElement("div");
+      d.className = "unit-details";
+      d.textContent = detail;
+      subjectContent.appendChild(d);
+    }
+
+    function goToSubjects() {
+      subjectContent.innerHTML = `<h2>Click on a subject to see details 📘</h2>`;
+    }
+
+    function goBack() {
+      window.location.href = "profile.html"; // or another file
+    }
+
+    function startTest(subject) {
+      const testPageMap = {
+        "Maths": "maths-test.html",
+        "Science": "science-test.html",
+        "English": "english-test.html",
+        "Telugu": "telugu-test.html"
+      };
+      const page = testPageMap[subject] || "test.html";
+      window.open(page, "_blank");
+    }
+  function logout() {
+    if (confirm("Are you sure you want to logout?")) {
+      // Redirect to login page (change 'login.html' to your actual login page)
+      window.location.href = "loginpage.html";
+    }
+  }
+  </script>
+</body>
+</html>

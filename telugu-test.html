@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <title>Think BoticS</title>
+  <link rel="icon" type="image/png" href="logo.png.jpg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated Telugu Quiz</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      background: url('telugu_background.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    /* Overlay to make content more readable */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: rgba(255, 255, 255, 0.8); /* Adjust transparency here */
+      z-index: -1;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.97);
+      max-width: 600px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      padding: 25px 35px 40px 35px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin: 0;
+    }
+
+    h1 { font-weight: 700; }
+    h2 { font-weight: 500; margin-bottom: 25px; }
+
+    #level, #question {
+      text-align: center;
+      margin: 5px 0;
+      font-weight: 600;
+    }
+
+    #diagram {
+      background: #f0f8ff;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto 15px auto;
+      min-height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+    }
+
+    #answerInput {
+      display: block;
+      margin: 0 auto 20px auto;
+      padding: 10px 15px;
+      font-size: 1.1rem;
+      width: 200px;
+      border-radius: 6px;
+      border: 2px solid #007bff;
+      text-align: center;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto 20px auto;
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #backBtn {
+      background: #008000;
+      margin-top: 10px;
+    }
+
+    #feedback {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      min-height: 22px;
+    }
+
+    #teluguKeyboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    #teluguKeyboard button {
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      font-size: 1.1rem;
+      background: #f5f5f5;
+      color: black;
+    }
+
+    #teluguKeyboard button:hover {
+      background: #dfefff;
+      border-color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Animated Telugu Quiz</h1>
+  <h2>తెలుగు భాషలో మనకు తెలియాల్సిన విషయాలు!</h2>
+
+  <div id="level">Level 1</div>
+  <div id="question">Q1: తెలుగు వర్ణమాలలో మొదటి అక్షరం ఏది?</div>
+
+  <div id="diagram">👩‍🍼</div>
+
+  <input type="text" id="answerInput" placeholder="మీ సమాధానం ఇక్కడ నమోదు చేయండి" autocomplete="off" />
+  <button id="submitBtn">Submit</button>
+
+  <div id="feedback"></div>
+
+  <div id="teluguKeyboard"></div>
+
+  <button id="backBtn">Back to Class Page</button>
+</div>
+
+<script>
+  const letterExamples = {
+    "అ": { word: "అమ", emoji: "👩‍🍼" },
+    "ఆ": { word: "ఆట", emoji: "🏏" },
+    "ఇ": { word: "ఇల్లు", emoji: "🏠" },
+    "ఈ": { word: "ఈగ", emoji: "🪰" },
+    "ఉ": { word: "ఉండు", emoji: "🪑" },
+    "ఊ": { word: "ఊరి", emoji: "🏘️" },
+    "ఎ": { word: "ఎలుగు", emoji: "🐻" },
+    "ఏ": { word: "ఏనుగు", emoji: "🐘" },
+    "ఐ": { word: "ఐదు", emoji: "5️⃣" },
+    "ఒ": { word: "ఒంటె", emoji: "🐪" },
+    "ఓ": { word: "ఓడ", emoji: "🚢" },
+    "ఔ": { word: "ఔషధం", emoji: "💊" }
+  };
+
+  const allLevels = [
+    [
+      { prompt: "తెలుగు వర్ణమాలలో మొదటి అక్షరం ఏది?", answer: "అ" },
+      { prompt: "తెలుగు వర్ణమాలలో చివరి అక్షరం ఏది?", answer: "ఔ" },
+      { prompt: "'ఈగ' అనే పదం ఏ అక్షరంతో మొదలవుతుంది?", answer: "ఈ" }
+    ]
+  ];
+
+  let currentLevel = 0;
+  let currentQuestion = 0;
+  let score = 0;
+
+  const levelEl = document.getElementById('level');
+  const questionEl = document.getElementById('question');
+  const diagramEl = document.getElementById('diagram');
+  const answerInput = document.getElementById('answerInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const feedbackEl = document.getElementById('feedback');
+  const backBtn = document.getElementById('backBtn');
+
+  function loadQuestion(){
+    const q = allLevels[currentLevel][currentQuestion];
+    levelEl.textContent = `Level ${currentLevel + 1}`;
+    questionEl.textContent = `Q${currentQuestion + 1}: ${q.prompt}`;
+    feedbackEl.textContent = '';
+    answerInput.value = '';
+    answerInput.focus();
+
+    const correct = q.answer;
+    const info = letterExamples[correct];
+
+    if (info && info.emoji) {
+      diagramEl.textContent = info.emoji;
+    } else {
+      diagramEl.textContent = "🔠";
+    }
+  }
+
+  function normalizeAnswer(ans){
+    return ans.trim().toLowerCase().replace(/[^0-9a-z\u0C00-\u0C7F\s]/gi, '');
+  }
+
+  function submitAnswer() {
+    const userAnswer = normalizeAnswer(answerInput.value);
+    if (!userAnswer) {
+      feedbackEl.style.color = 'red';
+      feedbackEl.textContent = "దయచేసి సమాధానం ఇవ్వండి.";
+      return;
+    }
+
+    const correctAnswerRaw = allLevels[currentLevel][currentQuestion].answer;
+    const correctAnswer = normalizeAnswer(correctAnswerRaw);
+
+    if (userAnswer === correctAnswer) {
+      score++;
+      const info = letterExamples[correctAnswerRaw];
+      const explain = info ? `${correctAnswerRaw} = ${info.word}` : "సరైనది!";
+      feedbackEl.style.color = 'green';
+      feedbackEl.textContent = explain;
+    } else {
+      feedbackEl.style.color = 'red';
+      feedbackEl.textContent = `తప్పు! సరైన సమాధానం: "${correctAnswerRaw}"`;
+    }
+
+    currentQuestion++;
+    if (currentQuestion >= allLevels[currentLevel].length) {
+      currentQuestion = 0;
+      currentLevel++;
+      if (currentLevel >= allLevels.length) {
+        alert(`పరీక్ష ముగిసింది! మీ స్కోరు: ${score} లో ${allLevels.length * 3}`);
+        currentLevel = 0;
+        score = 0;
+      }
+    }
+
+    setTimeout(loadQuestion, 2000);
+  }
+
+  submitBtn.addEventListener('click', submitAnswer);
+
+  answerInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      submitAnswer();
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    window.location.href = "Class-1.html";
+  });
+
+  const teluguKeys = ['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఋ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ',
+                      'క','ఖ','గ','ఘ','ఙ','చ','ఛ','జ','ఝ','ఞ','ట','ఠ','డ','ఢ','ణ',
+                      'త','థ','ద','ధ','న','ప','ఫ','బ','భ','మ','య','ర','ల','వ','శ','ష','స','హ',
+                      'ళ','క్ష','ఱ','ం','ః','ఁ','్',' ', '⌫'];
+
+  const keyboardContainer = document.getElementById('teluguKeyboard');
+
+  teluguKeys.forEach(key => {
+    const keyBtn = document.createElement('button');
+    keyBtn.textContent = key;
+
+    keyBtn.addEventListener('click', () => {
+      if (key === '⌫') {
+        answerInput.value = answerInput.value.slice(0, -1);
+      } else {
+        answerInput.value += key;
+      }
+      answerInput.focus();
+    });
+
+    keyboardContainer.appendChild(keyBtn);
+  });
+
+  loadQuestion();
+</script>
+
+</body>
+</html>

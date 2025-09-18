@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Think BoticS</title>
+  <link rel="icon" type="image/png" href="logo.png.jpg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated Science Quiz</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      background-image: url('science_background.png'); /* <- Your local file */
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      max-width: 600px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      padding: 25px 35px 40px 35px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin: 0;
+    }
+
+    h1 { font-weight: 700; }
+    h2 { font-weight: 500; margin-bottom: 25px; }
+
+    #level, #question {
+      text-align: center;
+      margin: 5px 0;
+      font-weight: 600;
+    }
+
+    #diagram {
+      background: #f0f8ff;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto 30px auto;
+      min-height: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    svg {
+      width: 140px;
+      height: 140px;
+    }
+
+    #answerInput {
+      display: block;
+      margin: 0 auto 20px auto;
+      padding: 10px 15px;
+      font-size: 1.1rem;
+      width: 150px;
+      border-radius: 6px;
+      border: 2px solid #007bff;
+      text-align: center;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto 20px auto;
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #backBtn {
+      background: #008000;
+      margin-top: 10px;
+    }
+
+    #feedback {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      min-height: 22px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Animated Science Quiz</h1>
+  <h2>Science is fun — let's explore!</h2>
+
+  <div id="level">Level 1</div>
+  <div id="question">Q1: Which organ pumps blood?</div>
+
+  <div id="diagram"></div>
+
+  <input type="text" id="answerInput" placeholder="Your answer here" autocomplete="off" />
+  <button id="submitBtn">Submit</button>
+
+  <div id="feedback"></div>
+
+  <button id="backBtn">Back to Class Page</button>
+</div>
+
+<script>
+  const allLevels = [
+    [ // Level 1
+      { prompt: "Which organ pumps blood?", diagram: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffc0cb"/><path d="M20 25 C20 15,44 15,44 25 C44 35,32 44,32 44 C32 44,20 35,20 25Z" fill="#ff0000"/></svg>`, answer: "heart" },
+      { prompt: "Which organ helps us breathe?", diagram: `<svg viewBox="0 0 64 64"><rect x="15" y="10" width="34" height="44" fill="#a0d8f0" rx="14"/></svg>`, answer: "lungs" },
+      { prompt: "Which planet do we live on?", diagram: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#1e90ff"/><circle cx="32" cy="32" r="15" fill="#32cd32"/></svg>`, answer: "earth" },
+      { prompt: "Which organ digests food?", diagram: `<svg viewBox="0 0 64 64"><path d="M20 20 Q32 10 44 20 Q50 40 32 44 Q18 50 20 20Z" fill="#ffcc99"/></svg>`, answer: "stomach" },
+      { prompt: "Which organ is responsible for thinking?", diagram: `<svg viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="28" ry="20" fill="#e0c0ff"/><path d="M18 20 Q32 5 46 20 Q58 35 46 48 Q32 62 18 48 Q5 35 18 20Z" fill="#a080ff"/></svg>`, answer: "brain" }
+    ]
+  ];
+
+  while(allLevels.length < 10){
+    allLevels.push(allLevels[0].map(q => ({...q}))); // Duplicate for demo
+  }
+
+  let currentLevel = 0;
+  let currentQuestion = 0;
+  let score = 0;
+
+  const levelEl = document.getElementById('level');
+  const questionEl = document.getElementById('question');
+  const diagramEl = document.getElementById('diagram');
+  const answerInput = document.getElementById('answerInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const feedbackEl = document.getElementById('feedback');
+  const backBtn = document.getElementById('backBtn');
+
+  function loadQuestion(){
+    const q = allLevels[currentLevel][currentQuestion];
+    levelEl.textContent = `Level ${currentLevel + 1}`;
+    questionEl.textContent = `Q${currentQuestion + 1}: ${q.prompt}`;
+    diagramEl.innerHTML = q.diagram;
+    feedbackEl.textContent = '';
+    answerInput.value = '';
+    answerInput.focus();
+  }
+
+  function normalizeAnswer(ans){
+    return ans.trim().toLowerCase().replace(/[^a-z\s]/g, '');
+  }
+
+  function submitAnswer() {
+    const userAnswer = normalizeAnswer(answerInput.value);
+    if (!userAnswer) {
+      feedbackEl.textContent = "Please enter an answer.";
+      return;
+    }
+
+    const correctAnswer = normalizeAnswer(allLevels[currentLevel][currentQuestion].answer);
+
+    if (userAnswer === correctAnswer) {
+      score++;
+      feedbackEl.style.color = 'green';
+      feedbackEl.textContent = "Correct! 🎉";
+    } else {
+      feedbackEl.style.color = 'red';
+      feedbackEl.textContent = `Wrong! Correct answer: "${allLevels[currentLevel][currentQuestion].answer}"`;
+    }
+
+    currentQuestion++;
+    if (currentQuestion >= allLevels[currentLevel].length) {
+      currentQuestion = 0;
+      currentLevel++;
+      if (currentLevel >= allLevels.length) {
+        alert(`Quiz finished! Your total score: ${score} out of ${allLevels.length * 5}`);
+        currentLevel = 0;
+        score = 0;
+      }
+    }
+
+    setTimeout(loadQuestion, 1500);
+  }
+
+  submitBtn.addEventListener('click', submitAnswer);
+
+  // ENTER KEY SUBMISSION
+  answerInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      submitAnswer();
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    window.location.href = "Class-1.html"; // Change to your actual URL
+  });
+
+  loadQuestion();
+</script>
+
+</body>
+</html>

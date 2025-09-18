@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Think BoticS</title>
+    <link rel="icon" type="image/png" href="logo.png.jpg" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Think BoticS - Login</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+      background: url("background.png") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      height: 100vh;
+      padding-left: 100px;
+    }
+
+    /* Login Board */
+    .login-board {
+      background: #fff3dc;
+      border: 4px solid #ff9800;
+      border-radius: 20px;
+      padding: 40px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Circle Logo */
+    .logo-circle {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 15px auto;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #ff9800;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* fills the circle nicely */
+    }
+
+    .login-board h1 {
+      font-size: 28px;
+      color: #ff5722;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px #ffd180;
+    }
+
+    .input-box {
+      margin: 15px 0;
+      text-align: left;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px;
+      border: 3px solid #4caf50;
+      border-radius: 12px;
+      background: #e6ffcc;
+      font-size: 16px;
+      font-family: "Comic Sans MS", "Comic Sans", cursive;
+      color: #333;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .input-box input:focus {
+      border-color: #2e7d32;
+      background: #d9ffb3;
+    }
+
+    .btn {
+      margin-top: 15px;
+      width: 100%;
+      padding: 14px;
+      background: #ff4081;
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-size: 20px;
+      font-family: "Comic Sans MS", "Comic Sans", cursive;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0px 5px 0px #c2185b;
+    }
+
+    .btn:hover {
+      background: #f50057;
+      transform: translateY(-2px);
+    }
+
+    .register {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .register a {
+      color: #2196f3;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        justify-content: center;
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Login board -->
+  <div class="login-board">
+    <!-- Circle Logo -->
+    <div class="logo-circle">
+      <img src="logo.png.jpg" alt="Thinker BoticS Logo">
+    </div>
+
+    <h1>Sign In</h1>
+
+    <div class="input-box">
+      <input type="text" id="login-username" placeholder="Username">
+    </div>
+    <div class="input-box">
+      <input type="password" id="login-password" placeholder="Password">
+    </div>
+
+    <button class="btn" onclick="login()">Enter</button>
+
+    <div class="register">
+      Don’t have an account? <a href="signup_page.html">Register</a>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      let savedUsername = localStorage.getItem("username");
+      let savedPassword = localStorage.getItem("password");
+
+      let enteredUsername = document.getElementById("login-username").value;
+      let enteredPassword = document.getElementById("login-password").value;
+
+      if (enteredUsername === savedUsername && enteredPassword === savedPassword) {
+        alert("Login successful 🎉");
+        window.location.href = "profile.html";
+      } else {
+        alert("Invalid username or password ❌");
+      }
+    }
+  </script>
+</body>
+
+</html>

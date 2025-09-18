@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Think BoticS</title>
+  <link rel="icon" type="image/png" href="logo.png.jpg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Think Botics - Kids Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #f0f9ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: row;
+      overflow-x: hidden;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #ffe5b4;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      border: 4px solid #ff9800;
+      max-width: 90%;
+      font-size: 1.2rem;
+    }
+    .modal-content button {
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .left-box {
+      width: 300px;
+      background: #fffbe5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 10;
+      padding: 28px 20px 22px;
+    }
+
+    .profile-icon-container {
+      width: 90px;
+      height: 90px;
+      background-color: #ff9800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .profile-icon {
+      color: #fffbe5;
+      font-size: 50px;
+    }
+
+    .student-id {
+      font-size: 18px;
+      font-weight: bold;
+      color: #8d6e63;
+      text-align: center;
+      background: #ffe2b5;
+      padding: 7px 0;
+      border-radius: 10px;
+      width: 80%;
+      margin-bottom: 20px;
+    }
+
+    .left-bg-video {
+      position: absolute;
+      top: 150px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 200px);
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .settings-row {
+      margin-top: auto;
+      margin-bottom: 54px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      width: 82%;
+      justify-content: center;
+      background: #fffbe5;
+      border-radius: 12px;
+      padding: 6px 0;
+    }
+    .settings-text {
+      font-size: 16px;
+      color: #9e6600;
+      font-weight: 600;
+    }
+
+    .main-content {
+      margin-left: 300px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .classes {
+      display: grid;
+      gap: 25px;
+      justify-content: center;
+      align-content: flex-start;
+      margin-top: 30px;
+      width: 100%;
+      max-width: 900px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .class-box {
+      border-radius: 15px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      height: 100px;
+      opacity: 0;
+      animation: fadeIn 0.4s forwards;
+    }
+
+    .class-box:nth-child(1) { background: #ff6fa1; }
+    .class-box:nth-child(2) { background: #4da6ff; }
+    .class-box:nth-child(3) { background: #66cc66; }
+    .class-box:nth-child(4) { background: #ffcc00; }
+    .class-box:nth-child(5) { background: #ff9933; }
+    .class-box:nth-child(6) { background: #cc66ff; }
+    .class-box:nth-child(7) { background: #00cc99; }
+    .class-box:nth-child(8) { background: #ff6666; }
+    .class-box:nth-child(9) { background: #3399ff; }
+    .class-box:nth-child(10) { background: #66ccff; }
+
+    .class-box:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .left-box { width: 220px; }
+      .main-content { margin-left: 220px; }
+      .classes { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .left-box {
+        width: 100%;
+        height: 80px;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px;
+      }
+      .main-content {
+        margin-left: 0;
+        padding-top: 90px;
+      }
+      .classes { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Modal for alerts -->
+  <div id="alertModal" class="modal">
+    <div class="modal-content">
+      <p id="alertMessage">This is a modal message.</p>
+      <button onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="left-box">
+    <div class="profile-icon-container">
+      <i class="fa-solid fa-user profile-icon"></i>
+    </div>
+    <div class="student-id" id="studentId"></div>
+
+    <video class="left-bg-video" autoplay loop muted playsinline>
+      <source src="profile video.mp4" type="video/mp4" />
+    </video>
+
+    <div style="flex: 1;"></div>
+
+    <div class="settings-row" onclick="openModal('Open settings!')">
+      <i class="fa-solid fa-gear settings-logo" style="color: #9e6600; font-size: 28px;"></i>
+      <span class="settings-text">Settings</span>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Content -->
+  <div class="main-content">
+    <div class="classes" id="classList"></div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function openModal(message) {
+      document.getElementById("alertMessage").textContent = message;
+      document.getElementById("alertModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("alertModal").style.display = "none";
+    }
+
+    // Set student ID
+    document.getElementById("studentId").textContent =
+      localStorage.getItem("studentUsername") || "STU12345";
+
+    // Class list rendering
+    const classList = document.getElementById("classList");
+
+    for (let i = 1; i <= 10; i++) {
+      const box = document.createElement("div");
+      box.className = "class-box";
+      box.textContent = `Class ${i}`;
+      box.style.animationDelay = `${i * 0.1}s`;
+
+      // Redirect logic for Class 1
+      if (i === 1) {
+        box.onclick = () => {
+          window.location.href = "Class-1.html";
+        };
+      }
+
+      classList.appendChild(box);
+    }
+  </script>
+</body>
+</html>
