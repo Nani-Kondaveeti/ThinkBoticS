@@ -230,6 +230,81 @@
       75% { transform: rotate(5deg); }
       100% { transform: rotate(0deg); }
     }
+    /* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 200px; /* smaller sidebar for tablets */
+  }
+
+  .video-container iframe {
+    flex: 1 1 100%; /* videos stack instead of side-by-side */
+    height: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* stack sidebar on top */
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  .sidebar-top {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .profile {
+    display: none; /* hide profile on very small screens */
+  }
+
+  .content {
+    border-left: none;
+    border-top: 2px solid #ddd;
+  }
+
+  .start-test {
+    float: none;
+    margin: 20px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px; /* smaller text */
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .back-btn {
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .subject-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .unit {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .video-container iframe {
+    height: 160px;
+  }
+}
+
   </style>
 </head>
 <body>
