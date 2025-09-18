@@ -118,6 +118,90 @@
       font-weight: bold;
       color: #333;
     }
+    /* 📱 Small screens (Phones) */
+@media (max-width: 600px) {
+  .game-container {
+    padding-top: 30px;
+  }
+
+  .title {
+    font-size: 1.5em;
+  }
+
+  .subtitle {
+    font-size: 1em;
+    margin-bottom: 15px;
+  }
+
+  .level-box {
+    min-width: auto;
+    max-width: 100%;
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .scrambled-word {
+    font-size: 1.6em;
+    letter-spacing: 2px;
+  }
+
+  .image-placeholder {
+    width: 80px;
+    height: 80px;
+    font-size: 45px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 16px;
+    margin: 8px 0;
+  }
+
+  button {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .result {
+    font-size: 16px;
+  }
+}
+
+/* 📲 Medium screens (Tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .level-box {
+    max-width: 90%;
+    padding: 28px;
+  }
+
+  .title {
+    font-size: 1.8em;
+  }
+
+  .subtitle {
+    font-size: 1.1em;
+  }
+
+  .scrambled-word {
+    font-size: 2em;
+  }
+
+  .image-placeholder {
+    width: 90px;
+    height: 90px;
+    font-size: 55px;
+  }
+
+  input {
+    width: 80%;
+  }
+
+  button {
+    width: 80%;
+  }
+}
+
   </style>
 </head>
 <body>
